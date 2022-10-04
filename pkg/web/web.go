@@ -25,8 +25,8 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/google/slowjam/pkg/stackparse"
-	"github.com/google/slowjam/third_party/colornames"
+	"github.com/DomHoney/slowjam/pkg/stackparse"
+	"github.com/DomHoney/slowjam/third_party/colornames"
 	"github.com/maruel/panicparse/v2/stack"
 )
 

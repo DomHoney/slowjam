@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/DomHoney/slowjam/pkg/stackparse"
 	"github.com/golang/glog"
-	"github.com/google/slowjam/pkg/stackparse"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -46,7 +46,7 @@ cfg := stacklog.Config{
   Poll: 100 * time.Millisecond,
 	Quiet: true
 }
-  
+
 s, err := stacklog.Start(cfg)
 defer s.Stop()
 ```
@@ -57,7 +57,7 @@ By default, this will poll the stack every 125ms.
 
 Install slowjam:
 
-`go install github.com/google/slowjam/cmd/slowjam`
+`go install github.com/DomHoney/slowjam/cmd/slowjam`
 
 Analyze a stacklog using the interactive webserver:
 
@@ -79,7 +79,7 @@ slowjam -html out.txt /path/to/stack.slog
 
 ## Real World Example
 
-Here's an example PR to integrate SlowJam analysis into minikube: [minikube#8329](https://github.com/kubernetes/minikube/pull/8329). 
+Here's an example PR to integrate SlowJam analysis into minikube: [minikube#8329](https://github.com/kubernetes/minikube/pull/8329).
 
 With this PR, anyone can generate a slowjam profile:
 

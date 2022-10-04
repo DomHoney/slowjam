@@ -22,7 +22,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/google/slowjam/pkg/stackparse"
+	"github.com/DomHoney/slowjam/pkg/stackparse"
 )
 
 // Tree outputs a human-readable tree of goroutines found.

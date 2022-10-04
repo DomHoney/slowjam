@@ -23,11 +23,11 @@ import (
 	"github.com/golang/glog"
 	"github.com/spf13/pflag"
 
-	"github.com/google/slowjam/pkg/pprof"
-	"github.com/google/slowjam/pkg/stacklog"
-	"github.com/google/slowjam/pkg/stackparse"
-	"github.com/google/slowjam/pkg/text"
-	"github.com/google/slowjam/pkg/web"
+	"github.com/DomHoney/slowjam/pkg/pprof"
+	"github.com/DomHoney/slowjam/pkg/stacklog"
+	"github.com/DomHoney/slowjam/pkg/stackparse"
+	"github.com/DomHoney/slowjam/pkg/text"
+	"github.com/DomHoney/slowjam/pkg/web"
 )
 
 var (
