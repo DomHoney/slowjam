@@ -84,8 +84,8 @@ func processSamples(samples []*stackparse.StackSample, st map[string]int64, igno
 	for _, s := range samples {
 		locs := []uint64{}
 
-		for _, g := range s.Context.Goroutines {
-			if ig[g.CreatedBy.Func.PkgDotName()] {
+		for _, g := range s.Snapshot.Goroutines {
+			if ig[g.Signature.CreatedBy.Calls[0].Func.Name] {
 				continue
 			}
 
@@ -99,14 +99,14 @@ func processSamples(samples []*stackparse.StackSample, st map[string]int64, igno
 				}
 
 				f := &Function{
-					Id:         uint64(ix(ftable, c.Func.Raw)),
-					Name:       ix(st, c.Func.PkgDotName()),
-					SystemName: ix(st, c.Func.PkgDotName()),
-					Filename:   ix(st, c.SrcPath),
+					Id:         uint64(ix(ftable, c.Func.Name)),
+					Name:       ix(st, c.Func.Name),
+					SystemName: ix(st, c.Func.Name),
+					Filename:   ix(st, c.LocalSrcPath),
 				}
 
 				l := &Location{
-					Id: uint64(ix(ltable, fmt.Sprintf("%s:%d", c.SrcPath, c.Line))),
+					Id: uint64(ix(ltable, fmt.Sprintf("%s:%d", c.LocalSrcPath, c.Line))),
 					Line: []*Line{
 						{FunctionId: f.Id, Line: int64(c.Line)},
 					},

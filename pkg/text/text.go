@@ -41,7 +41,7 @@ func Tree(tl *stackparse.Timeline) string {
 
 	for _, gid := range gor {
 		g := tl.Goroutines[gid]
-		sb.WriteString(fmt.Sprintf("goroutine %d (%s)\n", gid, g.Signature.CreatedByString(true)))
+		sb.WriteString(fmt.Sprintf("goroutine %d (%s)\n", gid, g.Signature.CreatedBy.Calls[0].Func.Complete))
 
 		for i, l := range g.Layers {
 			for _, c := range l.Calls {

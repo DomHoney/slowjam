@@ -26,13 +26,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/maruel/panicparse/stack"
+	"github.com/maruel/panicparse/v2/stack"
 )
 
 // StackSample represents a single Go stack at a point in time.
 type StackSample struct {
-	Time    time.Time
-	Context *stack.Context
+	Time     time.Time
+	Snapshot *stack.Snapshot
 }
 
 // Read parses a stack log input.
@@ -62,12 +62,12 @@ func Read(r io.Reader) ([]*StackSample, error) {
 		if strings.HasPrefix(scanner.Text(), "-") {
 			inStack = false
 
-			ctx, err := stack.ParseDump(sd, os.Stdout, false)
-			if err != nil {
+			ctx, _, err := stack.ScanSnapshot(sd, os.Stdout, stack.DefaultOpts())
+			if err != nil && err != io.EOF {
 				return samples, err
 			}
 
-			samples = append(samples, &StackSample{Time: t, Context: ctx})
+			samples = append(samples, &StackSample{Time: t, Snapshot: ctx})
 
 			continue
 		}

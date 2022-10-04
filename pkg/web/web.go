@@ -27,7 +27,7 @@ import (
 
 	"github.com/google/slowjam/pkg/stackparse"
 	"github.com/google/slowjam/third_party/colornames"
-	"github.com/maruel/panicparse/stack"
+	"github.com/maruel/panicparse/v2/stack"
 )
 
 var ganttTemplate = `
@@ -47,7 +47,7 @@ var ganttTemplate = `
         dataTable.addColumn({ type: 'string', id: 'style', role: 'style' });
         dataTable.addColumn({ type: 'date', id: 'Start' });
         dataTable.addColumn({ type: 'date', id: 'End' });
-  
+
         dataTable.addRows([
           {{ range $g := .TL.Goroutines }}
             {{ range $index, $layer := .Layers}}
@@ -108,7 +108,7 @@ func milliseconds(d time.Duration) string {
 }
 
 func creator(s *stack.Signature) string {
-	c := s.CreatedBy.Func.PkgDotName()
+	c := s.CreatedBy.Calls[0].Func.Name
 	if c == "" {
 		c = "main"
 	}

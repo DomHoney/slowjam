@@ -21,7 +21,7 @@ import (
 	"time"
 
 	"github.com/golang/glog"
-	"github.com/maruel/panicparse/stack"
+	"github.com/maruel/panicparse/v2/stack"
 )
 
 // SuggestedIgnore are goroutines that we recommend ignoring.
@@ -153,8 +153,8 @@ func CreateTimeline(samples []*StackSample, ignoreCreators []string, goroutines 
 	for _, s := range samples {
 		tl.Samples++
 
-		for _, g := range s.Context.Goroutines {
-			if ig[g.CreatedBy.Func.PkgDotName()] {
+		for _, g := range s.Snapshot.Goroutines {
+			if len(g.Signature.CreatedBy.Calls) == 0 || ig[g.Signature.CreatedBy.Calls[0].Func.Name] {
 				continue
 			}
 
@@ -177,8 +177,8 @@ func CreateTimeline(samples []*StackSample, ignoreCreators []string, goroutines 
 
 				thisCall := &Call{
 					StartDelta: s.Time.Sub(tl.Start),
-					Name:       c.Func.PkgDotName(),
-					Package:    c.Func.PkgName(),
+					Name:       c.Func.Name,
+					Package:    c.Func.DirName,
 					Args:       c.Args,
 					lastSeen:   s.Time,
 					Samples:    1,
@@ -212,7 +212,7 @@ func CreateTimeline(samples []*StackSample, ignoreCreators []string, goroutines 
 
 				lc := calls[len(calls)-1]
 				// Existing call with the same name or short sample size
-				if lc.Name == c.Func.PkgDotName() && lc.EndDelta == 0 && (lc.Samples < 3 || SameArgs(lc.Args, c.Args)) {
+				if lc.Name == c.Func.Name && lc.EndDelta == 0 && (lc.Samples < 3 || SameArgs(lc.Args, c.Args)) {
 					lc.Samples++
 					lc.lastSeen = s.Time
 
@@ -245,15 +245,15 @@ func CreateTimeline(samples []*StackSample, ignoreCreators []string, goroutines 
 }
 
 func InternalCall(c stack.Call) bool {
-	if c.Func.PkgName() == "syscall" {
+	if c.Func.Name == "syscall" {
 		return true
 	}
 
-	if c.Func.IsExported() {
+	if c.Func.IsExported {
 		return false
 	}
 
-	if c.IsStdlib || strings.Contains(c.SrcPath, "/go/src/") {
+	if c.Location == stack.Stdlib || strings.Contains(c.LocalSrcPath, "/go/src/") {
 		return true
 	}
 
